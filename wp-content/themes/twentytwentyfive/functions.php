@@ -156,3 +156,11 @@ if ( ! function_exists( 'twentytwentyfive_format_binding' ) ) :
 		}
 	}
 endif;
+
+function orchard_register_menus() {
+    register_nav_menus(array(
+        'main-menu' => __('Main Menu', 'orchard-test'),
+    ));
+}
+add_action('after_setup_theme', 'orchard_register_menus');
+
