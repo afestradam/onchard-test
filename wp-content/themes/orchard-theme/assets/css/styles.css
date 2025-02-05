@@ -1,0 +1,47 @@
+
+body {
+    max-width: 1366px !important;
+    margin: 0 auto !important;
+}
+
+/*---------------Navbar---------------*/
+
+.navbar {
+    background-color: #fff;
+}
+
+.navbar .navbar-container {
+    max-width: 1366px !important;
+    margin: 0 auto !important;
+}
+
+.navbar .navbar-brand img {
+    height: 48px;
+}
+
+.navbar .options li {
+    height: 100%;
+}
+
+.navbar .options li a {
+    margin: 0 5px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #181817;
+    font-size: 16px;
+    transition: 0.2s;
+}
+
+.navbar .options li a:hover {
+    color: darkred;
+    opacity: 0.5;
+    text-decoration: underline;
+}
+
+/*---------------Carousel---------------*/
+
+.carousel .carousel-item img {
+    /*height: 500px;*/
+}
+
+/*---------------Content---------------*/

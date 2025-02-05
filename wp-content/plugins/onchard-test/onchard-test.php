@@ -44,10 +44,5 @@ function orchard_dev_init() {
     require_once plugin_dir_path(__FILE__) . 'includes/shortcodes.php';
 }
 
-function orchard_enqueue_styles() {
-    wp_enqueue_style('orchard-style', plugin_dir_url(__FILE__) . 'assets/style.css');
-}
-
 add_action('plugins_loaded', 'orchard_dev_init');
-add_action('wp_enqueue_scripts', 'orchard_enqueue_styles');
 
