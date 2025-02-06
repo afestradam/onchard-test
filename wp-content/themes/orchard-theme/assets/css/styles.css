@@ -45,3 +45,32 @@ body {
 }
 
 /*---------------Content---------------*/
+
+.product-container {
+    display: flex;
+    justify-content: center;
+}
+
+.product-container .product-card {
+    margin: 10px;
+    width: 250px;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-shadow: lightgray 2px 1px 2px 1px;
+}
+
+.product-container .product-card .title {
+    text-align: center;
+    padding: 10px;
+}
+
+.product-container .product-card .image img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.product-container .product-card .description {
+    text-align: justify;
+    padding: 10px;
+}

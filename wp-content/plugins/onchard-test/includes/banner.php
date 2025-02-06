@@ -39,7 +39,7 @@ function orchard_get_banner_image()
         $custom_banner = get_field('banner_image', $item->ID);
 
         // Si el ítem se llama "Inicio", lo usamos como default
-        if (strtolower($item->title) === 'inicio' && !empty($custom_banner)) {
+        if (strtolower($item->title) === 'home' && !empty($custom_banner)) {
             $default_banner = $custom_banner;
         }
 
