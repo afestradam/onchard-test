@@ -2,71 +2,71 @@
 function orchard_get_banner_image()
 {
 
-    // Obtener el ID del menú asignado a "Main Menu"
+    // Get the ID of the menu assigned to "Main Menu"
     $menu_name = 'main-menu';
     $menu_locations = get_nav_menu_locations();
     $menu_id = isset($menu_locations[$menu_name]) ? $menu_locations[$menu_name] : false;
 
-    // Si no hay menú asignado, salir con error
+    // If no menu is assigned, exit with an error
     if (!$menu_id) {
-        error_log('Error: No se encontró el ID del menú.');
+        error_log('Error: Menu ID not found.');
         return '';
     }
 
-    // Obtener los ítems del menú
+    // Get menu items
     $menu_items = wp_get_nav_menu_items($menu_id);
     if (!$menu_items) {
-        error_log('Error: No se encontraron elementos en el menú.');
+        error_log('Error: No menu items found.');
         return '';
     }
 
-    // Crear estructura para mapear los banners
+    // Create a structure to map banners
     $menu_structure = [];
-    $default_banner = ''; // Se llenará con la imagen de "Inicio"
+    $default_banner = ''; // Will be set with the "Home" image
 
     foreach ($menu_items as $item) {
-        // Obtener el slug correctamente
+        // Get the slug correctly
         $item_url = $item->url;
         $parsed_url = parse_url($item_url);
         $slug = isset($parsed_url['path']) ? trim($parsed_url['path'], '/') : '';
 
-        // Manejar casos donde el slug está vacío o es incorrecto
-        if (empty($slug) || $slug === 'onchard-test') {
-            $slug = sanitize_title($item->title); // Usar el título como fallback
+        // Handle cases where the slug is empty or incorrect
+        if (empty($slug) || $slug === 'orchard-test') {
+            $slug = sanitize_title($item->title); // Use the title as a fallback
         }
 
-        // Obtener la imagen personalizada desde ACF (Si existe)
+        // Get the custom image from ACF (if available)
         $custom_banner = get_field('banner_image', $item->ID);
 
-        // Si el ítem se llama "Inicio", lo usamos como default
+        // If the item is called "Home," use it as the default
         if (strtolower($item->title) === 'home' && !empty($custom_banner)) {
             $default_banner = $custom_banner;
         }
 
-        // Guardar información en la estructura del menú
+        // Store information in the menu structure
         $menu_structure[$item->ID] = [
             'slug'   => $slug,
             'parent' => $item->menu_item_parent,
-            'banner' => !empty($custom_banner) ? $custom_banner : '' // Solo guardar si tiene imagen
+            'banner' => !empty($custom_banner) ? $custom_banner : '' // Store only if an image exists
         ];
     }
 
-    // Si no encontramos un banner de "Inicio", poner una imagen genérica
+    // If no "Home" banner is found, set a generic image
     if (empty($default_banner)) {
         $default_banner = 'https://via.placeholder.com/1200x400?text=Default+Banner';
     }
 
-    // Obtener el slug de la página actual
+    // Get the slug of the current page
     global $post;
     $current_slug = ($post) ? get_post_field('post_name', $post->ID) : '';
 
-    // Si no se detecta un slug, devolver el banner de "Inicio"
+    // If no slug is detected, return the "Home" banner
     if (empty($current_slug)) {
-        error_log('No se detectó un slug. Usando banner de Inicio.');
+        error_log('No slug detected. Using Home banner.');
         return $default_banner;
     }
 
-    // Buscar si el slug actual está en el menú
+    // Search if the current slug is in the menu
     $found_item = null;
     foreach ($menu_structure as $item_id => $item) {
         if ($item['slug'] === $current_slug) {
@@ -75,11 +75,11 @@ function orchard_get_banner_image()
         }
     }
 
-    // Si encontramos el ítem, usamos su banner o el de su padre
+    // If the item is found, use its banner or its parent’s banner
     if ($found_item) {
         $parent_id = $found_item['parent'];
 
-        // Si el ítem tiene un padre con banner, lo usamos
+        // If the item has a parent with a banner, use it
         if ($parent_id != 0 && isset($menu_structure[$parent_id]) && !empty($menu_structure[$parent_id]['banner'])) {
             $banner_image = $menu_structure[$parent_id]['banner'];
         } else {
@@ -89,13 +89,13 @@ function orchard_get_banner_image()
         $banner_image = $default_banner;
     }
 
-    error_log('Menu Structure: ' . json_encode($menu_structure)); // Para depuración
-    error_log('Banner final seleccionado: ' . $banner_image);
+    error_log('Menu Structure: ' . json_encode($menu_structure)); // Debugging
+    error_log('Final selected banner: ' . $banner_image);
     return $banner_image;
-
 }
 
-// Mostrar el banner en la página
+
+// Display the banner on the page
 function orchard_display_banner()
 {
     $banner_image = orchard_get_banner_image();
@@ -103,6 +103,4 @@ function orchard_display_banner()
     $banner_images = is_array($banner_image) ? $banner_image : [$banner_image];
     include get_template_directory() . '/templates/carousel.php';
 
-    //$timestamp = time(); // Forzar actualización
-    //echo '<div class="banner" style="background-image: url(' . esc_url($banner_image) . '?v=' . $timestamp . '); height: 400px;"></div>';
 }

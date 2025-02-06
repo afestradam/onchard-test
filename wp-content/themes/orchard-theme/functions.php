@@ -1,5 +1,8 @@
 <?php
-// Habilitar Menús en WordPress
+
+require_once get_template_directory() . '/class-wp-bootstrap-navwalker.php';
+
+// Enable Menus in WordPress
 function orchard_register_menus()
 {
     register_nav_menus(array(
@@ -9,17 +12,15 @@ function orchard_register_menus()
 
 add_action('after_setup_theme', 'orchard_register_menus');
 
-// Habilitar Soporte para Imágenes Destacadas
+// Enable Support for Featured Images
 add_theme_support('post-thumbnails');
 
-// Cargar Bootstrap y CSS del Tema
+// Load Bootstrap and Theme CSS
 function orchard_enqueue_styles()
 {
-    // Cargar Bootstrap desde CDN (puedes cambiar a local si prefieres)
+    // Load Bootstrap from CDN (you can change to a local version if preferred)
     wp_enqueue_style('bootstrap-css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css', [], '5.3.2');
-    wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js', ['jquery'], '5.3.2', true);
-
-    // Cargar CSS del Tema
+    // Load Theme CSS
     wp_enqueue_style('orchard-style', get_template_directory_uri() . '/assets/css/styles.css');
 }
 
@@ -38,7 +39,15 @@ function orchard_customize_register($wp_customize) {
     )));
 }
 
+function orchard_enqueue_scripts() {
+    // Add Bootstrap JS (if not already included)
+    wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js', array('jquery'), '5.3.2', true);
+    // Add custom dropdown script
+    // wp_enqueue_script('orchard-dropdown-script', get_template_directory_uri() . '/assets/js/custom-dropdown.js', array('jquery'), '1.0', true);
+}
+
 add_action('wp_enqueue_scripts', 'orchard_enqueue_styles');
 add_action('customize_register', 'orchard_customize_register');
+add_action('wp_enqueue_scripts', 'orchard_enqueue_scripts');
 
 ?>

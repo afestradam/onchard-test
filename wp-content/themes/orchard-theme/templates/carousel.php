@@ -1,5 +1,5 @@
 <?php
-// Si no se ha definido `$banner_images`, usar un array vacío
+// If `$banner_images` is not defined, use an empty array
 if (!isset($banner_images) || empty($banner_images)) {
     $banner_images = [get_template_directory_uri() . '/assets/images/default-banner.jpg'];
 }

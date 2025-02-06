@@ -7,12 +7,12 @@
  * Author: Andrés Estrada
  * Author URI: https://andrestrada.com
  */
-
+// Prevent direct access
 if (!defined('ABSPATH')) {
-    exit; // Evita accesos directos
+    exit;
 }
 
-// Activar el plugin
+// Activate the plugin
 function orchard_dev_activate() {
 
     global $wpdb;
@@ -36,9 +36,10 @@ function orchard_dev_activate() {
 }
 register_activation_hook(__FILE__, 'orchard_dev_activate');
 
-// Cargar archivos del plugin
+// Load plugin files
 function orchard_dev_init() {
     require_once plugin_dir_path(__FILE__) . 'includes/banner.php';
+    require_once plugin_dir_path(__FILE__) . 'includes/all-products.php';
     require_once plugin_dir_path(__FILE__) . 'includes/product-of-the-day.php';
     require_once plugin_dir_path(__FILE__) . 'includes/admin.php';
     require_once plugin_dir_path(__FILE__) . 'includes/shortcodes.php';

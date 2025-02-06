@@ -1,21 +1,22 @@
 <?php
-// Agregar el menú de administración
+// Add the admin menu
 function orchard_admin_menu()
 {
     add_menu_page(
-        'Orchard Products',  // Título de la página
-        'Orchard Products',  // Texto del menú
-        'manage_options',     // Permiso requerido
+        'Orchard Products',  // Page title
+        'Orchard Products',  // Menu text
+        'manage_options',     // Required permission
         'orchard-products',   // Slug
-        'orchard_products_page', // Función que muestra la página
-        'dashicons-cart',      // Ícono del menú
-        6                     // Posición en el menú
+        'orchard_products_page', // Function that displays the page
+        'dashicons-cart',      // Menu icon
+        6                     // Menu position
     );
 }
 
+
 add_action('admin_menu', 'orchard_admin_menu');
 
-// Eliminar producto si se hace clic en "Delete"
+// Delete product if "Delete" is clicked
 if (isset($_GET['delete'])) {
     global $wpdb;
     $table_name = $wpdb->prefix . 'orchard_products';
@@ -26,27 +27,27 @@ if (isset($_GET['delete'])) {
     echo '<div class="updated"><p>Product deleted successfully!</p></div>';
 }
 
-// Marcar un producto como "Producto del Día"
+// Mark a product as "Product of the Day"
 if (isset($_GET['feature'])) {
     global $wpdb;
     $table_name = $wpdb->prefix . 'orchard_products';
     $product_id = intval($_GET['feature']);
 
-    // Primero, quitar la marca de todos los productos
+    // First, remove the "Product of the Day" mark from all products
     $wpdb->update($table_name, ['product_featured' => 0], ['product_featured' => 1]);
 
-    // Ahora, marcar el producto seleccionado como "Producto del Día"
+    // Now, mark the selected product as "Product of the Day"
     $wpdb->update($table_name, ['product_featured' => 1], ['product_id' => $product_id]);
 
     echo '<div class="updated"><p>Product set as "Product of the Day" successfully!</p></div>';
 }
 
-// Función que renderiza la página
+// Function that renders the admin page
 function orchard_products_page() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'orchard_products';
 
-    // Verificar si se envió el formulario para agregar un producto
+    // Check if the form was submitted to add a new product
     if (isset($_POST['orchard_add_product'])) {
         $product_name = sanitize_text_field($_POST['product_name']);
         $product_description = sanitize_textarea_field($_POST['product_description']);
@@ -61,7 +62,7 @@ function orchard_products_page() {
         echo '<div class="updated"><p>Product added successfully!</p></div>';
     }
 
-    // Obtener todos los productos de la base de datos
+    // Retrieve all products from the database
     $products = $wpdb->get_results("SELECT * FROM $table_name");
 
     ?>
@@ -131,3 +132,4 @@ function orchard_products_page() {
 
     <?php
 }
+
